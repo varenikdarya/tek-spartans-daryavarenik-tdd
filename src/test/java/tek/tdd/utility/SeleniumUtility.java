@@ -69,4 +69,3 @@ public class SeleniumUtility extends BaseSetup {
     }
 
 }
-
