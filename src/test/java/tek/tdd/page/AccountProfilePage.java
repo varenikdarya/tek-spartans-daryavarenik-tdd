@@ -14,4 +14,22 @@ public class AccountProfilePage extends SeleniumUtility {
         @FindBy(className = "account__information-email")
         public WebElement accountEmailInfo;
 
+    @FindBy(id = "nameInput")
+    public WebElement nameInput;
+
+    @FindBy(id = "personalPhoneInput")
+    public WebElement personalPhoneInput;
+
+    @FindBy(id = "personalUpdateBtn")
+    public WebElement personalUpdateBtn;
+
+    @FindBy(className = "account__information-username")
+    public WebElement accountUserNameText;
+
+    public void updateNameAndPhone(String name, String phone) {
+        sendText(nameInput, name);
+        sendText(personalPhoneInput, phone);
+
+        clickOnElement(personalUpdateBtn);
     }
+}

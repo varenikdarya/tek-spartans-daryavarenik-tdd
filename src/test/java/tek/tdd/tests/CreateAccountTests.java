@@ -1,9 +1,14 @@
 package tek.tdd.tests;
 
+import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 import tek.tdd.base.UIBaseClass;
 import tek.tdd.utility.DataGenerator;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class CreateAccountTests extends UIBaseClass {
     @Test
@@ -11,7 +16,7 @@ public class CreateAccountTests extends UIBaseClass {
         clickOnElement(homePage.signInLink);
         clickOnElement(signInPage.createNewAccountLink);
 
-        String expectedEmail = DataGenerator.genereteRandomEmail("Mohammad");
+        String expectedEmail = DataGenerator.generateRandomEmail("Mohammad");
 
         signUpPage.fillUpCreateAccountForm("Mohammad",
                 expectedEmail,
@@ -24,10 +29,10 @@ public class CreateAccountTests extends UIBaseClass {
     }
 
     /*
-   Story 4.1 (Activity 15 Minute)
-   Navigate to Create Account page and Create new Account
-   With existing email and validate error message "this email is already exist, please use another email address".
-    */
+    Story 4.1 (Activity 15 Minute)
+    Navigate to Create Account page and Create new Account
+    With existing email and validate error message "this email is already exist, please use another email address".
+     */
     @Test
     public void createNewAccountWithExistingEmail() {
         clickOnElement(homePage.signInLink);
@@ -42,47 +47,59 @@ public class CreateAccountTests extends UIBaseClass {
 
     }
 
-   /* Activity:
-
-    Story# 4.2
-    Navigate to Create new Account page and click sign up button without filling the form
-    Validate all errors on all fields.
-
-    */
-
+    /*
+    Activity: Activity
+        Story# 4.2
+        Navigate to Create new Account page and click sign up button without filling the form
+        Validate all errors on all fields.
+     */
     @Test
-    public void createNewAccountWithEmptyField() {
+    public void validateFieldErrors1() {
         clickOnElement(homePage.signInLink);
         clickOnElement(signInPage.createNewAccountLink);
-
         clickOnElement(signUpPage.signUpButton);
 
-        String actualErrorName = getElementText(signUpPage.nameError);
-        Assert.assertEquals(actualErrorName, "Name is a required field",
-                "Error Message for empty name field should match");
+        String actualNameError = getElementText(signUpPage.nameError);
+        Assert.assertEquals(actualNameError, "Name is a required field");
 
-        String actualErrorEmail = getElementText(signUpPage.emailError);
-        Assert.assertEquals(actualErrorEmail, "Email is a required field",
-                "Error Message for empty email field should match");
+        String actualEmailError = getElementText(signUpPage.emailError);
+        Assert.assertEquals(actualEmailError, "Email is a required field");
 
-        String actualErrorPassword = getElementText(signUpPage.passwordError);
-        Assert.assertEquals(actualErrorPassword, "Password is a required field",
-                "Error Message for empty name field should match");
+        String actualPasswordError = getElementText(signUpPage.passwordError);
+        Assert.assertEquals(actualPasswordError, "Password is a required field");
 
-        String actualErrorConfirmPassword = getElementText(signUpPage.confirmPasswordError);
-        Assert.assertEquals(actualErrorConfirmPassword, "Confirm Password is a required field",
+        String actualConfirmError = getElementText(signUpPage.confirmPasswordError);
+        Assert.assertEquals(actualConfirmError, "Confirm Password is a required field");
+    }
 
+    @Test
+    public void validateFieldsError2() {
+        clickOnElement(homePage.signInLink);
+        clickOnElement(signInPage.createNewAccountLink);
+        clickOnElement(signUpPage.signUpButton);
+        // Create a list of Expected Errors,
+        //Get List of All Error Elements
+        //Loop through and validate
 
+        SoftAssert softAssert = new SoftAssert();
 
+        List<String> expectedError = Arrays.asList(
+                "Name is a required field",
+                "Email is a required field" ,
+                "Password is a required field" ,
+                "Confirm Password is a required field");
 
-                "Error Message for empty name field should match");
+        List< WebElement> actualErrorElements = signUpPage.fieldErrors;
 
+        softAssert.assertEquals(actualErrorElements.size(), expectedError.size());
+
+        for (int i = 0; i < expectedError.size(); i++) {
+            softAssert.assertEquals(
+                    getElementText(actualErrorElements.get(i)),
+                    expectedError.get(i)
+            );
+        }
+
+        softAssert.assertAll();
     }
 }
-
-
-
-
-
-
-

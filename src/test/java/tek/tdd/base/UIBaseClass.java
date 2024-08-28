@@ -48,6 +48,9 @@ import tek.tdd.utility.SeleniumUtility;
             LOGGER.info("running after each test and quite browser");
             quitBrowser();
         }
-
+    public void validCredentialSignIn() {
+        clickOnElement(homePage.signInLink);
+        signInPage.doSignIn("guardiansclass@gmail.com" , "Class2023!");
+    }
 
 }
